@@ -1,4 +1,4 @@
-import React, { act, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import fakedata from './FakeData';
 import { v4 as uuidv4 } from 'uuid';
