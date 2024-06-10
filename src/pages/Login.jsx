@@ -82,12 +82,12 @@ const SignUpButton = styled.button`
     border: 1px solid #E0E7E9;
     border-radius: 40px ;
     padding: 10px;  
-    background-color: #E0E7E9;
+    background-color: #acd1d1;
     cursor: pointer;
     width: 80%;
     margin: 10px;
 
     &:hover{
-    background-color: #71b0a4;
+    background-color: #55a29e;
   }
 `;

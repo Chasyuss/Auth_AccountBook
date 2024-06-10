@@ -2,29 +2,35 @@ import styled from "styled-components";
 
 const Join = () => {
     return (
-        <LoginWrapper>
+        <JoinWrapper>
             <Form>
-                <Text> 로그인 </Text>
-                <LoginInput>
+                <Text> 회원가입 </Text>
+                <JoinInput>
                     <Label>아이디:</Label>
-                    <Input type="email" placeholder="아이디를 입력하세요" required />
-                </LoginInput>
-                <LoginInput>
+                    <Input type="email" placeholder="이메일로 입력하세요" required />
+                </JoinInput>
+
+                <JoinInput>
                     <Label>비밀번호:</Label>
                     <Input type="password" placeholder="비밀번호를 입력하세요" required />
-                </LoginInput>
+                </JoinInput>
+
+                <JoinInput>
+                    <Label>닉네임:</Label>
+                    <Input type="text" placeholder="닉네임을 입력하세요" required />
+                </JoinInput>
                 <Button type="submit">
-                    로그인
+                    회원가입
                 </Button>
-                <SignUpButton>회원가입</SignUpButton>
+                <SignInButton>로그인</SignInButton>
             </Form>
-        </LoginWrapper>
+        </JoinWrapper>
     )
 }
 
 export default Join;
 
-const LoginWrapper = styled.div`
+const JoinWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -34,6 +40,7 @@ const LoginWrapper = styled.div`
 const Text = styled.div`
     text-align: center;
     font-size: 35px;
+    margin-top: 15px;
 `;
 const Form = styled.div`
     border: 1px solid #ccc;
@@ -42,15 +49,15 @@ const Form = styled.div`
     display: flex;
     flex-direction: column;
     width: 50vw;
-    height: 50vh;
+    /* height: 60vh; */
     background-color: #f9f9f9;
     border-radius: 20px;
     align-items: center;
 `;
 
-const LoginInput = styled.div`
+const JoinInput = styled.div`
     margin: 10px;
-    text-align: center;
+    text-align: center;\
 `;
 const Label = styled.label`
     font-size: 15px;
@@ -78,16 +85,17 @@ const Button = styled.button`
 
 `;
 
-const SignUpButton = styled.button`
+const SignInButton = styled.button`
     border: 1px solid #E0E7E9;
     border-radius: 40px ;
     padding: 10px;  
-    background-color: #E0E7E9;
+    background-color: #469098;
     cursor: pointer;
     width: 80%;
     margin: 10px;
+    color: white;
 
     &:hover{
-    background-color: #71b0a4;
+    background-color: #3f7081;
   }
 `;
