@@ -57,7 +57,7 @@ const Form = styled.div`
 
 const JoinInput = styled.div`
     margin: 10px;
-    text-align: center;\
+    text-align: center;
 `;
 const Label = styled.label`
     font-size: 15px;
