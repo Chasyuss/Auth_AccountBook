@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { styled } from 'styled-components';
-import fakedata from './FakeData';
 
 const Detail = () => {
     const { id } = useParams();
