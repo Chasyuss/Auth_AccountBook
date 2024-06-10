@@ -13,17 +13,17 @@ const Join = () => {
                 <Text> 회원가입 </Text>
                 <JoinInput>
                     <Label>아이디:</Label>
-                    <Input type="email" placeholder="아이디를 입력하세요" required />
+                    <Input type="email" placeholder="아이디를 입력하세요" required minLength={4} maxLength={10} />
                 </JoinInput>
 
                 <JoinInput>
                     <Label>비밀번호:</Label>
-                    <Input type="password" placeholder="비밀번호를 입력하세요" required />
+                    <Input type="password" placeholder="비밀번호를 입력하세요" required minLength={4} maxLength={15} />
                 </JoinInput>
 
                 <JoinInput>
                     <Label>닉네임:</Label>
-                    <Input type="text" placeholder="닉네임을 입력하세요" required />
+                    <Input type="text" placeholder="닉네임을 입력하세요" required minLength={1} maxLength={10} />
                 </JoinInput>
                 <Button type="submit">
                     회원가입
