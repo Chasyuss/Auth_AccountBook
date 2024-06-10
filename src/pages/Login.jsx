@@ -1,6 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Login = () => {
+    const navigate = useNavigate();
+
+    const gotoJoin = () => {
+        navigate("/join");
+    };
     return (
         <LoginWrapper>
             <Form>
@@ -16,7 +22,7 @@ const Login = () => {
                 <Button type="submit">
                     로그인
                 </Button>
-                <SignUpButton>회원가입</SignUpButton>
+                <SignUpButton onClick={gotoJoin}>회원가입</SignUpButton>
             </Form>
         </LoginWrapper>
     )
@@ -34,6 +40,7 @@ const LoginWrapper = styled.div`
 const Text = styled.div`
     text-align: center;
     font-size: 35px;
+    margin-top: 15px;
 `;
 const Form = styled.div`
     border: 1px solid #ccc;
@@ -82,12 +89,13 @@ const SignUpButton = styled.button`
     border: 1px solid #E0E7E9;
     border-radius: 40px ;
     padding: 10px;  
-    background-color: #acd1d1;
+    background-color: #375f70;
     cursor: pointer;
     width: 80%;
     margin: 10px;
+    color: white;
 
     &:hover{
-    background-color: #55a29e;
+    background-color: #4d8e94;
   }
 `;

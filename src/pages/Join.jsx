@@ -1,13 +1,19 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Join = () => {
+    const navigate = useNavigate();
+
+    const gotoLogin = () => {
+        navigate("/login");
+    }
     return (
         <JoinWrapper>
             <Form>
                 <Text> 회원가입 </Text>
                 <JoinInput>
                     <Label>아이디:</Label>
-                    <Input type="email" placeholder="이메일로 입력하세요" required />
+                    <Input type="email" placeholder="아이디를 입력하세요" required />
                 </JoinInput>
 
                 <JoinInput>
@@ -22,7 +28,7 @@ const Join = () => {
                 <Button type="submit">
                     회원가입
                 </Button>
-                <SignInButton>로그인</SignInButton>
+                <SignInButton onClick={gotoLogin}>로그인</SignInButton>
             </Form>
         </JoinWrapper>
     )
