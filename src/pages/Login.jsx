@@ -2,41 +2,45 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import useBearsStore from "../zustand/bearsStore";
 
 const Login = () => {
     const navigate = useNavigate();
     const [loginid, setLoginid] = useState("");
     const [loginpassword, setLoginpassword] = useState("");
+    const login = useBearsStore((state) => state.login);
 
-    const Login = async () => {
-        e.preventDefault();
-        try {
-            const response = await axios.post("https://moneyfulpublicpolicy.co.kr/login", {
-                id: loginid,
-                password: loginpassword,
-            });
-            console.log(response.data);
-
-            const accessToken = response.data.accessToken;
-
-            if (accessToken) {
-                localStorage.setItem('accessToken', accessToken);
-                console.log("token 저장 완료", accessToken);
-            } else {
-                console.error("에러 ");
-            }
-            // navigate("/");
-        } catch (error) {
-            console.error("로그인 실패");
-        }
-    };
-
-    const LoginHandler = (e) => {
-        Login();
+    const handleLogin = async () => {
+        // Login();
+        await login(loginid, loginpassword);
 
         setLoginid("");
         setLoginpassword("");
     }
+
+    // const Login = async () => {
+    //     e.preventDefault();
+
+    //     // try {
+    //     //     const response = await axios.post("https://moneyfulpublicpolicy.co.kr/login", {
+    //     //         id: loginid,
+    //     //         password: loginpassword,
+    //     //     });
+    //     //     console.log(response.data);
+
+    //     //     const accessToken = response.data.accessToken;
+
+    //     //     if (accessToken) {
+    //     //         localStorage.setItem('accessToken', accessToken);
+    //     //         console.log("token 저장 완료", accessToken);
+    //     //     } else {
+    //     //         console.error("에러 ");
+    //     //     }
+    //     //     // navigate("/");
+    //     // } catch (error) {
+    //     //     console.error("로그인 실패");
+    //     // }
+    // };
 
     const gotoJoin = () => {
         navigate("/join");
@@ -53,7 +57,7 @@ const Login = () => {
                     <Label>비밀번호:</Label>
                     <Input type="password" placeholder="비밀번호를 입력하세요" required value={loginpassword} onChange={(e) => setLoginpassword(e.target.value)} />
                 </LoginInput>
-                <Button type="submit" onClick={LoginHandler}>
+                <Button type="submit" onClick={handleLogin}>
                     로그인
                 </Button>
                 <SignUpButton onClick={gotoJoin}>회원가입</SignUpButton>
