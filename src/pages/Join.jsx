@@ -18,8 +18,11 @@ const Join = () => {
                 nickname: nickname,
             });
             console.log(response.data);
+            alert("회원가입이 되었습니다");
+            navigate("/login");
         } catch (error) {
             console.log(error);
+            alert("회원가입 실패 ");
         }
     };
 

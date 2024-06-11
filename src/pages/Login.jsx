@@ -10,10 +10,15 @@ const Login = () => {
     const [loginpassword, setLoginpassword] = useState("");
     const login = useBearsStore((state) => state.login);
 
-    const handleLogin = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
         // Login();
         await login(loginid, loginpassword);
-
+        if (useBearsStore.getState().isAuthenticated) { // 로그인 성공했을때 홈으로 넘어가기 
+            navigate('/');
+        } else {
+            navigate("/join");
+        }
         setLoginid("");
         setLoginpassword("");
     }

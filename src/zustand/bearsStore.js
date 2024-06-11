@@ -16,11 +16,13 @@ const useBearsStore = create((set) => ({
         localStorage.setItem("acessToken", accessToken);
         set({ isAuthenticated: true, accessToken });
         console.log("로그인 성공", response.data);
+        alert("로그인되었습니다");
       } else {
         console.log("에러", error);
       }
     } catch (error) {
       console.error("로그인 실패 ");
+      alert("로그인에 실패하였습니다");
     }
   },
 
