@@ -1,21 +1,48 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import useBearsStore from '../zustand/bearsStore';
+import { useEffect } from 'react';
 
 
 const Layout = () => {
+    const navigate = useNavigate();
+    const { isAuthenticated, user, logout, checkToken } = useBearsStore((state) => ({
+        isAuthenticated: state.isAuthenticated,
+        user: state.user,
+        logout: state.logout,
+        checkToken: state.checkToken,
+    }));
+
+    useEffect(() => {
+        checkToken();
+    }), [checkToken];
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    }
+
     return (
-        <Nav>
-            <Logo>Account</Logo>
-            <NavList>
-                <NavLink to="/">Home</NavLink>
-                <NavLink to="/profile"> 내 프로필 </NavLink>
-                <LoginBtn> 로그인 </LoginBtn>
-            </NavList>
-        </Nav>
+        <Container>
+            {isAuthenticated && (
+                <Nav>
+                    <Logo>Account</Logo>
+                    <NavList>
+                        <NavLink to="/">Home</NavLink>
+                        <NavLink to="/profile"> 내 프로필 </NavLink>
+                        <LoginBtn onClick={handleLogout}> 로그아웃 </LoginBtn>
+                    </NavList>
+                </Nav>
+            )}
+        </Container>
     );
 };
 
 export default Layout;
+
+const Container = styled.div`
+    
+`;
 
 const Nav = styled.nav`
   display: flex;
