@@ -1,10 +1,42 @@
-
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Login = () => {
     const navigate = useNavigate();
+    const [loginid, setLoginid] = useState("");
+    const [loginpassword, setLoginpassword] = useState("");
 
+    const Login = async () => {
+        e.preventDefault();
+        try {
+            const response = await axios.post("https://moneyfulpublicpolicy.co.kr/login", {
+                id: loginid,
+                password: loginpassword,
+            });
+            console.log(response.data);
+
+            const accessToken = response.data.accessToken;
+
+            if (accessToken) {
+                localStorage.setItem('accessToken', accessToken);
+                console.log("token 저장 완료", accessToken);
+            } else {
+                console.error("에러 ");
+            }
+            // navigate("/");
+        } catch (error) {
+            console.error("로그인 실패");
+        }
+    };
+
+    const LoginHandler = (e) => {
+        Login();
+
+        setLoginid("");
+        setLoginpassword("");
+    }
 
     const gotoJoin = () => {
         navigate("/join");
@@ -15,13 +47,13 @@ const Login = () => {
                 <Text> 로그인 </Text>
                 <LoginInput>
                     <Label>아이디:</Label>
-                    <Input type="email" placeholder="아이디를 입력하세요" required />
+                    <Input type="email" placeholder="아이디를 입력하세요" required value={loginid} onChange={(e) => setLoginid(e.target.value)} />
                 </LoginInput>
                 <LoginInput>
                     <Label>비밀번호:</Label>
-                    <Input type="password" placeholder="비밀번호를 입력하세요" required />
+                    <Input type="password" placeholder="비밀번호를 입력하세요" required value={loginpassword} onChange={(e) => setLoginpassword(e.target.value)} />
                 </LoginInput>
-                <Button type="submit">
+                <Button type="submit" onClick={LoginHandler}>
                     로그인
                 </Button>
                 <SignUpButton onClick={gotoJoin}>회원가입</SignUpButton>
@@ -51,7 +83,7 @@ const Form = styled.div`
     display: flex;
     flex-direction: column;
     width: 50vw;
-    height: 50vh;
+    height: 30vh;
     background-color: #f9f9f9;
     border-radius: 20px;
     align-items: center;
