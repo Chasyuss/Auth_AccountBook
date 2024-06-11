@@ -5,6 +5,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import Login from "./pages/Login";
 import Join from "./pages/Join";
 import Layout from "./pages/Layout";
+import Profile from "./pages/Profile";
 
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

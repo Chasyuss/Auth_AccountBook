@@ -8,7 +8,7 @@ const Layout = () => {
             <Logo>Account</Logo>
             <NavList>
                 <NavLink to="/">Home</NavLink>
-                <NavLink> 내 프로필 </NavLink>
+                <NavLink to="/profile"> 내 프로필 </NavLink>
                 <LoginBtn> 로그인 </LoginBtn>
             </NavList>
         </Nav>
