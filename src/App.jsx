@@ -4,6 +4,7 @@ import Detail from "./pages/Detail";
 import GlobalStyle from './styles/GlobalStyle';
 import Login from "./pages/Login";
 import Join from "./pages/Join";
+import Layout from "./pages/Layout";
 
 
 const App = () => {
@@ -11,7 +12,8 @@ const App = () => {
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Layout />} />
+        <Route index element={<Home />} />
         <Route path="/detail/:id" element={<Detail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
