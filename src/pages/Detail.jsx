@@ -1,99 +1,90 @@
-import { useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { styled } from 'styled-components';
+import { useRef, useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { QueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { getExpenses, putExpense } from '../lib/api/expense';
+import useBearsStore from '../zustand/bearsStore';
 
 const Detail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const queryClient = new QueryClient();
+    const { isAuthenticated, user } = useBearsStore();
 
-    const navigate = useNavigate(); //창 넘긱 
-    const [allItems, setAllItems] = useState(() => {
-        const storedItems = localStorage.getItem('allItems');
-        const allItems = storedItems ? JSON.parse(storedItems) : [];
-        return allItems;
-    });
-    const item = [...allItems].find(item => item.id === id); // 정보 화면 
+    const { data: expenses = [], isLoading, error } = useQuery({ queryKey: ["expenses"], queryFn: getExpenses });
 
-    //Ref사용
+    const item = expenses.find(item => item.id === id);
+
     const dateRef = useRef();
     const itemRef = useRef();
     const amountRef = useRef();
     const descriptionRef = useRef();
 
-    //수정 
+    useEffect(() => {
+        if (item) {
+            dateRef.current.value = item.date;
+            itemRef.current.value = item.item;
+            amountRef.current.value = item.amount;
+            descriptionRef.current.value = item.description;
+        }
+    }, [item]);
+
+    const editMutation = useMutation({
+        mutationFn: putExpense,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["expenses"]);
+            navigate('/');
+        },
+    });
+
     const handleEdit = () => {
         const editItem = {
             ...item,
             date: dateRef.current.value,
             item: itemRef.current.value,
             amount: parseFloat(amountRef.current.value),
-            description: descriptionRef.current.value
+            description: descriptionRef.current.value,
+            createdBy: user.userId,
         };
 
-        const updateItems = allItems.map(i => (i.id === item.id ? editItem : i)); //업데이트
-        setAllItems(updateItems);
-        localStorage.setItem('allItems', JSON.stringify(updateItems)); //로컬스토리지 저장
-
-        alert('수정되었습니다.');
-        navigate('/'); // 홈으로 이동 
+        editMutation.mutate(editItem);
     };
 
-    //삭제 
-    const handleDelete = () => {
-        if (window.confirm('정말로 이 지출 항목을 삭제하시겠습니까?')) { // confirm 사용해서 사용자에게 확인받기
-            //allitem에서 id가 일치하지 않은것만 필터링하고 새로운 배열 만듬
-            const filterItems = allItems.filter(i => i.id !== item.id);
-            setAllItems(filterItems);
-            //로컬스토리지에 업데이트
-            localStorage.setItem('allItems', JSON.stringify(filterItems));
-            alert('항목이 삭제되었습니다');
-            navigate('/'); // 홈 이동 
-
-
-        } else { //사용자가 취소 선택시, 다시 home page로 전환 
-            return navigate('/')
-        }
-
-    };
-
-
-    //되돌아가기 버튼 
     const handleBack = () => {
-        navigate(-1); // 이전단계로 되돌리기 
+        navigate(-1);
     };
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error loading expense details</div>;
+    if (!item) return <div>항목을 찾을 수 없습니다.</div>;
 
     return (
-        <div>
-            <DetailContainer>
-                <Title> 정보</Title>
-                <Detailinput>
-                    <Label> 날짜 </Label>
-                    <Input type="text" defaultValue={item.date} ref={dateRef} />
-                </Detailinput>
-
-                <Detailinput>
-                    <Label> 항목 </Label>
-                    <Input type="text" defaultValue={item.item} ref={itemRef} />
-                </Detailinput>
-
-                <Detailinput>
-                    <Label> 금액 </Label>
-                    <Input type="text" defaultValue={item.amount} ref={amountRef} />
-                </Detailinput>
-
-                <Detailinput>
-                    <Label> 내용 </Label>
-                    <Input type="text" defaultValue={item.description} ref={descriptionRef} />
-                </Detailinput>
-
-                <AllButton>
-                    <EditButton onClick={handleEdit}> 수정 </EditButton>
-                    <DeleteButton onClick={handleDelete}> 삭제 </DeleteButton>
-                    <Button onClick={handleBack}> 뒤로가기 </Button>
-                </AllButton>
-            </DetailContainer>
-        </div>
-    )
-}
+        <DetailContainer>
+            <Title>정보</Title>
+            <Detailinput>
+                <Label>날짜</Label>
+                <Input type="text" defaultValue={item.date} ref={dateRef} />
+            </Detailinput>
+            <Detailinput>
+                <Label>항목</Label>
+                <Input type="text" defaultValue={item.item} ref={itemRef} />
+            </Detailinput>
+            <Detailinput>
+                <Label>금액</Label>
+                <Input type="text" defaultValue={item.amount} ref={amountRef} />
+            </Detailinput>
+            <Detailinput>
+                <Label>내용</Label>
+                <Input type="text" defaultValue={item.description} ref={descriptionRef} />
+            </Detailinput>
+            <AllButton>
+                <EditButton onClick={handleEdit}>수정</EditButton>
+                {/* <DeleteButton onClick={handleDelete}>삭제</DeleteButton> */}
+                <Button onClick={handleBack}>뒤로가기</Button>
+            </AllButton>
+        </DetailContainer>
+    );
+};
 
 export default Detail;
 

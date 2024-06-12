@@ -11,12 +11,33 @@ export const getExpenses = async () => {
   }
 };
 
+export const getExpense = async ({ queryKey }) => {
+  try {
+    const response = await axios.get(`${JSON_SEVER_HOST}/${queryKey[1]}`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    alert("데이터 로드 실패");
+  }
+};
+
 export const postExpense = async (newExpense) => {
   try {
     const response = await axios.post(
       `${JSON_SEVER_HOST}/expenses`,
       newExpense
     );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    alert("데이터가 쓰기 실패");
+  }
+};
+
+export const putExpense = async (updatedExpense) => {
+  const { id, ...rest } = updatedExpense;
+  try {
+    const response = await axios.put(`${JSON_SEVER_HOST}/expenses/${id}`, rest);
     return response.data;
   } catch (err) {
     console.log(err);
