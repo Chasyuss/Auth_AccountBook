@@ -19,10 +19,6 @@ const Layout = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // useEffect(() => {
-  //   console.log("isAuthenticated", isAuthenticated);
-  //   console.log("User", user);
-  // }, [isAuthenticated, user]);
 
   const handleLogout = () => {
     logout();
