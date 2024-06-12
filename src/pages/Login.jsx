@@ -1,8 +1,33 @@
+import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import useBearsStore from "../zustand/bearsStore";
 
 const Login = () => {
     const navigate = useNavigate();
+    const [loginid, setLoginid] = useState("");
+    const [loginpassword, setLoginpassword] = useState("");
+    const login = useBearsStore((state) => state.login);
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        if (!loginid || !loginpassword) {
+            alert("아이디와 비밀번호를 입력하세요.");
+            return;
+        }
+
+        await login(loginid, loginpassword);
+        if (useBearsStore.getState().isAuthenticated) { // 로그인 성공했을때 홈으로 넘어가기 
+            navigate('/');
+        } else {
+            navigate("/join");
+        }
+
+        setLoginid("");
+        setLoginpassword("");
+    }
 
     const gotoJoin = () => {
         navigate("/join");
@@ -13,13 +38,13 @@ const Login = () => {
                 <Text> 로그인 </Text>
                 <LoginInput>
                     <Label>아이디:</Label>
-                    <Input type="email" placeholder="아이디를 입력하세요" required />
+                    <Input type="email" placeholder="아이디를 입력하세요" required value={loginid} onChange={(e) => setLoginid(e.target.value)} />
                 </LoginInput>
                 <LoginInput>
                     <Label>비밀번호:</Label>
-                    <Input type="password" placeholder="비밀번호를 입력하세요" required />
+                    <Input type="password" placeholder="비밀번호를 입력하세요" required value={loginpassword} onChange={(e) => setLoginpassword(e.target.value)} />
                 </LoginInput>
-                <Button type="submit">
+                <Button type="submit" onClick={handleLogin}>
                     로그인
                 </Button>
                 <SignUpButton onClick={gotoJoin}>회원가입</SignUpButton>

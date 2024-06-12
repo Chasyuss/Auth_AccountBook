@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import fakedata from './FakeData';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import Navbar from "./Layout";
 
 
 const Home = () => {
@@ -102,41 +103,44 @@ const Home = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <Container>
-                <Input>
-                    <label> 날짜 </label>
-                    <DateInput type="text" placeholder='YYYY-MM-DD' value={date} onChange={(e) => setDate(e.target.value)} />
-                    <label> 항목 </label>
-                    <InputTitle type="text" placeholder='지출 항목' value={item} onChange={(e) => setItem(e.target.value)} />
-                    <label> 금액 </label>
-                    <MoneyInput type="number" placeholder='지출 금액' value={amount} onChange={(e) => setAmount(e.target.value)} />
-                    <label> 내용 </label>
-                    <TextInput type="text" placeholder='지출 내용' value={description} onChange={(e) => setDescription(e.target.value)} />
-                    <AddButton type="submit"> 저장 </AddButton>
-                </Input>
+        <>
+            <Navbar />
+            <form onSubmit={handleSubmit}>
+                <Container>
+                    <Input>
+                        <label> 날짜 </label>
+                        <DateInput type="text" placeholder='YYYY-MM-DD' value={date} onChange={(e) => setDate(e.target.value)} />
+                        <label> 항목 </label>
+                        <InputTitle type="text" placeholder='지출 항목' value={item} onChange={(e) => setItem(e.target.value)} />
+                        <label> 금액 </label>
+                        <MoneyInput type="number" placeholder='지출 금액' value={amount} onChange={(e) => setAmount(e.target.value)} />
+                        <label> 내용 </label>
+                        <TextInput type="text" placeholder='지출 내용' value={description} onChange={(e) => setDescription(e.target.value)} />
+                        <AddButton type="submit"> 저장 </AddButton>
+                    </Input>
 
-                <Tabs>
-                    {months.map((month, index) => (
-                        <Tab key={index} $active={activeMonth === month} //클릭한 박스 확인위해 active prop에 할당할 값
-                            onClick={() => handleTab(month)} > {month} </Tab>
-                    ))}
-                </Tabs>
-                <Content>
-                    {filterdata.length > 0 ? (
-                        filterdata.map((item) => (
-                            <List key={item.id} onClick={() => HandleDetailClick(item.id)}>
-                                <DateWrapper> {item.date} </DateWrapper>
-                                <MoneyWrapper> {item.amount}원 </MoneyWrapper>
-                                <Description> {item.item}: {item.description} </Description>
-                            </List>
-                        ))
-                    ) : (
-                        '해당 월에 지출 내역이 없습니다.'
-                    )}
-                </Content>
-            </Container>
-        </form >
+                    <Tabs>
+                        {months.map((month, index) => (
+                            <Tab key={index} $active={activeMonth === month} //클릭한 박스 확인위해 active prop에 할당할 값
+                                onClick={() => handleTab(month)} > {month} </Tab>
+                        ))}
+                    </Tabs>
+                    <Content>
+                        {filterdata.length > 0 ? (
+                            filterdata.map((item) => (
+                                <List key={item.id} onClick={() => HandleDetailClick(item.id)}>
+                                    <DateWrapper> {item.date} </DateWrapper>
+                                    <MoneyWrapper> {item.amount}원 </MoneyWrapper>
+                                    <Description> {item.item}: {item.description} </Description>
+                                </List>
+                            ))
+                        ) : (
+                            '해당 월에 지출 내역이 없습니다.'
+                        )}
+                    </Content>
+                </Container>
+            </form >
+        </>
     );
 };
 
@@ -195,6 +199,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 60px;
 `;
 
 const Tabs = styled.div`
