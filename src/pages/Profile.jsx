@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import Navbar from "./Layout";
 import useBearsStore from '../zustand/bearsStore';
@@ -6,6 +6,13 @@ import useBearsStore from '../zustand/bearsStore';
 const Profile = () => {
     const [avatar, setAvatar] = useState(null);
     const [nickname, setNickname] = useState("");
+    const updateProfile = useBearsStore((state) => state.updateProfile);
+    const updateUser = useBearsStore((state) => state.user);
+    // useEffect(() => {
+    //     if (updateUser) {
+    //         setNickname(updateUser.nickname);
+    //     }
+    // }, [updateUser]);
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -16,10 +23,14 @@ const Profile = () => {
         setNickname(e.target.value);
     };
 
-    const handleUpdateProfile = () => {
-        useBearsStore.getState().updateProfile(avatar, nickname);
+    const handleUpdateProfile = async () => {
+        await updateProfile(avatar, nickname);
+        const updatedUser = useBearsStore.getState().user;
+        setNickname(updatedUser.nickname);
 
-        setNickname("");
+        //초기화 
+        setAvatar(null);
+        setNickname('');
     };
 
 
@@ -67,11 +78,6 @@ const Title = styled.label`
     text-align: center;
     font-size: 30px;
     margin-bottom: 15px;
-`;
-
-
-const ProfileImage = styled.div`
-
 `;
 
 const Label = styled.label`

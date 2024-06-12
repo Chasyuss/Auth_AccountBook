@@ -19,10 +19,10 @@ const Layout = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
-    console.log("User", user);
-  }, [isAuthenticated, user]);
+  // useEffect(() => {
+  //   console.log("isAuthenticated", isAuthenticated);
+  //   console.log("User", user);
+  // }, [isAuthenticated, user]);
 
   const handleLogout = () => {
     logout();
@@ -39,7 +39,12 @@ const Layout = () => {
           <NavList>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/profile"> 내 프로필 </NavLink>
-            {user && <Nickname> {user?.nickname} </Nickname>}
+            {user && (
+              <>
+                {user.avatar && <Avatar src={user.avatar} alt="Profile" />} {/* 프로필 이미지 */}
+                <Nickname> {user?.nickname} </Nickname>
+              </>
+            )}
             <LoginBtn onClick={handleLogout}> 로그아웃 </LoginBtn>
           </NavList>
         </Nav>
@@ -106,4 +111,10 @@ const LoginBtn = styled.button`
     &:hover{
     background-color: #71b0a4;
   }
+`;
+
+const Avatar = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 `;
