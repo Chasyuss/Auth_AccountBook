@@ -6,10 +6,11 @@ import { useEffect } from 'react';
 
 const Layout = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, logout, checkToken } = useBearsStore((state) => ({
+  const { isAuthenticated, logout, checkToken, user } = useBearsStore((state) => ({
     isAuthenticated: state.isAuthenticated,
     logout: state.logout,
     checkToken: state.checkToken,
+    user: state.user,
   }));
 
   useEffect(() => {
@@ -17,6 +18,11 @@ const Layout = () => {
       navigate("/login");
     }
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated);
+    console.log("User", user);
+  }, [isAuthenticated, user]);
 
   const handleLogout = () => {
     logout();
@@ -33,6 +39,7 @@ const Layout = () => {
           <NavList>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/profile"> 내 프로필 </NavLink>
+            {user && <Nickname> {user?.nickname} </Nickname>}
             <LoginBtn onClick={handleLogout}> 로그아웃 </LoginBtn>
           </NavList>
         </Nav>
@@ -82,6 +89,12 @@ const NavLink = styled(Link)`
     background-color: #71b0a4;
     border-radius: 5px;
   }
+`;
+
+const Nickname = styled.div`
+  color: #333;
+  margin: 0 10px;
+  padding: 10px;
 `;
 
 const LoginBtn = styled.button`

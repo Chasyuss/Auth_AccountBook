@@ -24,6 +24,7 @@ const Login = () => {
         } else {
             navigate("/join");
         }
+
         setLoginid("");
         setLoginpassword("");
     }

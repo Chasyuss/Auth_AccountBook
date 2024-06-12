@@ -1,8 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 import Navbar from "./Layout";
+import useBearsStore from '../zustand/bearsStore';
 
 const Profile = () => {
+    const [avatar, setAvatar] = useState(null);
+    const [nickname, setNickname] = useState("");
+
+    const handleAvatarChange = (e) => {
+        const file = e.target.files[0];
+        setAvatar(file);
+    };
+
+    const handleNicknameChange = (e) => {
+        setNickname(e.target.value);
+    };
+
+    const handleUpdateProfile = () => {
+        useBearsStore.getState().updateProfile(avatar, nickname);
+
+        setNickname("");
+    };
+
+
     return (
         <>
             <Navbar />
@@ -10,10 +30,10 @@ const Profile = () => {
                 <Form>
                     <Title> 프로필 수정 </Title>
                     <Label>프로필 이미지 변경</Label>
-                    <Input type="file" />
+                    <Input type="file" onChange={handleAvatarChange} />
                     <Label> 닉네임 변경 </Label>
-                    <Input type="text" />
-                    <Updatebtn> 수정하기 </Updatebtn>
+                    <Input type="text" value={nickname} onChange={handleNicknameChange} />
+                    <Updatebtn onClick={handleUpdateProfile}> 수정하기 </Updatebtn>
                 </Form>
             </ProfileWrapper>
         </>
