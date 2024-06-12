@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components';
 import Navbar from "./Layout";
 import useBearsStore from '../zustand/bearsStore';
@@ -7,12 +7,7 @@ const Profile = () => {
     const [avatar, setAvatar] = useState(null);
     const [nickname, setNickname] = useState("");
     const updateProfile = useBearsStore((state) => state.updateProfile);
-    const updateUser = useBearsStore((state) => state.user);
-    // useEffect(() => {
-    //     if (updateUser) {
-    //         setNickname(updateUser.nickname);
-    //     }
-    // }, [updateUser]);
+    const fileInputRef = useRef(null); // 파일 입력 요소 참조
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -29,8 +24,11 @@ const Profile = () => {
         setNickname(updatedUser.nickname);
 
         //초기화 
-        setAvatar(null);
         setNickname('');
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = null; // 파일 입력 요소 초기화
+        }
     };
 
 
@@ -41,7 +39,7 @@ const Profile = () => {
                 <Form>
                     <Title> 프로필 수정 </Title>
                     <Label>프로필 이미지 변경</Label>
-                    <Input type="file" onChange={handleAvatarChange} />
+                    <Input type="file" onChange={handleAvatarChange} ref={fileInputRef} />
                     <Label> 닉네임 변경 </Label>
                     <Input type="text" value={nickname} onChange={handleNicknameChange} />
                     <Updatebtn onClick={handleUpdateProfile}> 수정하기 </Updatebtn>

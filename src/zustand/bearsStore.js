@@ -93,7 +93,7 @@ const useBearsStore = create((set) => ({
         }
       );
       //성공시
-      const user = response.data.user;
+      const user = response.data;
       set({ user: { ...user } });
       console.log("프로필 변경 성공", response.data);
     } catch (error) {
