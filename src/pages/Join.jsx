@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { valid } from "uuid4";
 
 const Join = () => {
     const navigate = useNavigate();
@@ -21,8 +20,8 @@ const Join = () => {
             alert("회원가입이 되었습니다");
             navigate("/login");
         } catch (error) {
-            console.log(error);
-            alert("회원가입 실패 ");
+            console.log(error?.response?.data?.message);
+            alert(error?.response?.data?.message);
         }
     };
 

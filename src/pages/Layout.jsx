@@ -5,37 +5,40 @@ import { useEffect } from 'react';
 
 
 const Layout = () => {
-    const navigate = useNavigate();
-    const { isAuthenticated, user, logout, checkToken } = useBearsStore((state) => ({
-        isAuthenticated: state.isAuthenticated,
-        user: state.user,
-        logout: state.logout,
-        checkToken: state.checkToken,
-    }));
+  const navigate = useNavigate();
+  const { isAuthenticated, logout, checkToken } = useBearsStore((state) => ({
+    isAuthenticated: state.isAuthenticated,
+    logout: state.logout,
+    checkToken: state.checkToken,
+  }));
 
-    useEffect(() => {
-        checkToken();
-    }), [checkToken];
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
     }
+  }, [isAuthenticated, navigate]);
 
-    return (
-        <Container>
-            {isAuthenticated && (
-                <Nav>
-                    <Logo>Account</Logo>
-                    <NavList>
-                        <NavLink to="/">Home</NavLink>
-                        <NavLink to="/profile"> 내 프로필 </NavLink>
-                        <LoginBtn onClick={handleLogout}> 로그아웃 </LoginBtn>
-                    </NavList>
-                </Nav>
-            )}
-        </Container>
-    );
+  const handleLogout = () => {
+    logout();
+    alert("로그아웃 되었습니다");
+    console.log("로그아웃 완료");
+    navigate('/login');
+  }
+
+  return (
+    <Container>
+      {isAuthenticated && (
+        <Nav>
+          <Logo>Account</Logo>
+          <NavList>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/profile"> 내 프로필 </NavLink>
+            <LoginBtn onClick={handleLogout}> 로그아웃 </LoginBtn>
+          </NavList>
+        </Nav>
+      )}
+    </Container>
+  );
 };
 
 export default Layout;

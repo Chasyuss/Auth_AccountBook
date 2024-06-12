@@ -12,7 +12,12 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        // Login();
+
+        if (!loginid || !loginpassword) {
+            alert("아이디와 비밀번호를 입력하세요.");
+            return;
+        }
+
         await login(loginid, loginpassword);
         if (useBearsStore.getState().isAuthenticated) { // 로그인 성공했을때 홈으로 넘어가기 
             navigate('/');
@@ -22,30 +27,6 @@ const Login = () => {
         setLoginid("");
         setLoginpassword("");
     }
-
-    // const Login = async () => {
-    //     e.preventDefault();
-
-    //     // try {
-    //     //     const response = await axios.post("https://moneyfulpublicpolicy.co.kr/login", {
-    //     //         id: loginid,
-    //     //         password: loginpassword,
-    //     //     });
-    //     //     console.log(response.data);
-
-    //     //     const accessToken = response.data.accessToken;
-
-    //     //     if (accessToken) {
-    //     //         localStorage.setItem('accessToken', accessToken);
-    //     //         console.log("token 저장 완료", accessToken);
-    //     //     } else {
-    //     //         console.error("에러 ");
-    //     //     }
-    //     //     // navigate("/");
-    //     // } catch (error) {
-    //     //     console.error("로그인 실패");
-    //     // }
-    // };
 
     const gotoJoin = () => {
         navigate("/join");

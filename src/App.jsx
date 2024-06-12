@@ -13,15 +13,16 @@ import { useEffect } from "react";
 const App = () => {
   const { checkToken, isAuthenticated } = useBearsStore();
 
+  console.log("auth", isAuthenticated);
   useEffect(() => {
     checkToken();
-  }, [checkToken]);
+  }, []);
 
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="/" element={<Layout />} />
+        {isAuthenticated && <Route path="/" element={<Layout />} />}
         {/* 인증되어야지만 home 으로 넘어가기 */}
         <Route index element={isAuthenticated ? <Home /> : <Navigate to="/login" />} />
         <Route path="/detail/:id" element={<Detail />} />
