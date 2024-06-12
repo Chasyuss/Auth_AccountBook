@@ -11,16 +11,6 @@ export const getExpenses = async () => {
   }
 };
 
-export const getExpense = async ({ queryKey }) => {
-  try {
-    const response = await axios.get(`${JSON_SEVER_HOST}/${queryKey[1]}`);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    alert("데이터 로드 실패");
-  }
-};
-
 export const postExpense = async (newExpense) => {
   try {
     const response = await axios.post(
@@ -41,6 +31,16 @@ export const putExpense = async (updatedExpense) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    alert("데이터가 쓰기 실패");
+    alert("데이터가 수정 실패");
+  }
+};
+
+export const deleteExpense = async (id) => {
+  try {
+    const response = await axios.delete(`${JSON_SEVER_HOST}/expenses/${id}`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    alert("데이터가 삭제 실패");
   }
 };

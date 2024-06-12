@@ -2,14 +2,14 @@ import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { QueryClient, useQuery, useMutation } from "@tanstack/react-query";
-import { getExpenses, putExpense } from '../lib/api/expense';
+import { getExpenses, putExpense, deleteExpense } from '../lib/api/expense';
 import useBearsStore from '../zustand/bearsStore';
 
 const Detail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const queryClient = new QueryClient();
-    const { isAuthenticated, user } = useBearsStore();
+    const { user } = useBearsStore();
 
     const { data: expenses = [], isLoading, error } = useQuery({ queryKey: ["expenses"], queryFn: getExpenses });
 
@@ -50,6 +50,23 @@ const Detail = () => {
         editMutation.mutate(editItem);
     };
 
+    const deleteMutation = useMutation({
+        mutationFn: deleteExpense,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["expenses"]);
+            navigate('/');
+        },
+    });
+
+
+    const handleDelete = () => {
+        if (window.confirm('정말로 이 지출 항목을 삭제하시겠습니까?')) {
+            deleteMutation.mutate(item.id);
+        }
+    };
+
+
+
     const handleBack = () => {
         navigate(-1);
     };
@@ -79,7 +96,7 @@ const Detail = () => {
             </Detailinput>
             <AllButton>
                 <EditButton onClick={handleEdit}>수정</EditButton>
-                {/* <DeleteButton onClick={handleDelete}>삭제</DeleteButton> */}
+                <DeleteButton onClick={handleDelete}>삭제</DeleteButton>
                 <Button onClick={handleBack}>뒤로가기</Button>
             </AllButton>
         </DetailContainer>
