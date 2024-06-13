@@ -37,7 +37,11 @@ const Layout = () => {
             <NavLink to="/profile"> 내 프로필 </NavLink>
             {user && (
               <>
-                {user.avatar && <Avatar src={user.avatar} alt="Profile" />} {/* 프로필 이미지 */}
+                {user.avatar ? (
+                  <Avatar src={user.avatar} alt="Profile" />
+                ) : (
+                  <DefaultAvatar>{user.nickname?.charAt(0)}</DefaultAvatar>
+                )}
                 <Nickname> {user?.nickname} </Nickname>
               </>
             )}
@@ -67,7 +71,6 @@ const Nav = styled.nav`
   top: 0;
   left: 0;
   box-sizing: border-box;
-  /* z-index: 1000; */
 `;
 
 const Logo = styled.div`
@@ -113,4 +116,17 @@ const Avatar = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
+`;
+
+const DefaultAvatar = styled.div`
+    width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
 `;
