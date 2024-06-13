@@ -24,12 +24,11 @@ const useBearsStore = create((set) => ({
       if (accessToken) {
         localStorage.setItem("accessToken", accessToken);
         set({ isAuthenticated: true, accessToken, user }); //상태업데이트
-        console.log("로그인 성공", response.data);
       } else {
         console.log("에러", error);
       }
     } catch (error) {
-      console.log("로그인 실패 ", error.response?.data?.message);
+      alert("로그인에 실패하였습니다 ", error.response?.data?.message);
     }
   },
 
@@ -54,16 +53,12 @@ const useBearsStore = create((set) => ({
           nickname: response.data.nickname,
           avatar: response.data.avatar,
         };
-        console.log("userdata:", user);
         set({ isAuthenticated: true, accessToken, user });
       } catch (error) {
-        console.error("토큰이 유효하지 않습니다.");
         localStorage.removeItem("accessToken");
         set({ isAuthenticated: false, accessToken: null, user: null });
-        console.log("token 제거", localStorage.accessToken);
       }
     } else {
-      console.error("토큰이 없습니다.");
       set({ isAuthenticated: false, accessToken: null, user: null });
     }
   },
@@ -72,10 +67,6 @@ const useBearsStore = create((set) => ({
   updateProfile: async (avatar, nickname) => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      if (!accessToken) {
-        alert("인증되지 않은 사용자입니다");
-        return;
-      }
 
       const body = {
         avatar,
@@ -95,9 +86,8 @@ const useBearsStore = create((set) => ({
       //성공시
       const user = response.data;
       set({ user: { ...user } });
-      console.log("프로필 변경 성공", response.data);
     } catch (error) {
-      console.log("변경 실패", error.response?.data?.message);
+      alert("프로필 변경에 실패하였습니다");
     }
   },
 }));

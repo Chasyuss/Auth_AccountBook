@@ -23,7 +23,6 @@ const Layout = () => {
   const handleLogout = () => {
     logout();
     alert("로그아웃 되었습니다");
-    console.log("로그아웃 완료");
     navigate('/login');
   }
 

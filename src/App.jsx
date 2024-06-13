@@ -13,7 +13,6 @@ import { useEffect } from "react";
 const App = () => {
   const { checkToken, isAuthenticated } = useBearsStore();
 
-  console.log("auth", isAuthenticated);
   useEffect(() => {
     checkToken();
   }, []);

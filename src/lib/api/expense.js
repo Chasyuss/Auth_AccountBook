@@ -7,7 +7,7 @@ export const getExpenses = async () => {
     const response = await axios.get(`${JSON_SEVER_HOST}/expenses`);
     return response.data;
   } catch (err) {
-    alert("데이터 불러오기 실패");
+    alert("데이터 불러오기 실패하였습니다");
   }
 };
 
@@ -20,7 +20,7 @@ export const postExpense = async (newExpense) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    alert("데이터가 쓰기 실패");
+    alert("데이터가 쓰기 실패하였습니다");
   }
 };
 
@@ -31,7 +31,7 @@ export const putExpense = async (updatedExpense) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    alert("데이터가 수정 실패");
+    alert("데이터를 수정 실패하였습니다");
   }
 };
 
@@ -41,6 +41,6 @@ export const deleteExpense = async (id) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    alert("데이터가 삭제 실패");
+    alert("데이터를 삭제 실패하였습니다");
   }
 };
