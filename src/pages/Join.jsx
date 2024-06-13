@@ -86,7 +86,6 @@ const Form = styled.div`
     display: flex;
     flex-direction: column;
     width: 50vw;
-    /* height: 60vh; */
     background-color: #f9f9f9;
     border-radius: 20px;
     align-items: center;

@@ -25,6 +25,7 @@ const Profile = () => {
         const updatedUser = useBearsStore.getState().user;
         setNickname(updatedUser.nickname);
 
+        alert("프로필이 변경되었습니다");
         navigate('/');
 
 

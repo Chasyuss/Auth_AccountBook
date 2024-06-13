@@ -29,6 +29,7 @@ const Detail = () => {
         }
     }, [item]);
 
+    //query이용
     const editMutation = useMutation({
         mutationFn: putExpense,
         onSuccess: () => {
@@ -60,7 +61,7 @@ const Detail = () => {
 
 
     const handleDelete = () => {
-        if (window.confirm('정말로 이 지출 항목을 삭제하시겠습니까?')) {
+        if (confirm('정말로 이 지출 항목을 삭제하시겠습니까?')) {
             deleteMutation.mutate(item.id);
         }
     };
@@ -72,7 +73,7 @@ const Detail = () => {
     };
 
     if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading expense details</div>;
+    if (error) return <div> 데이터 불러오기 Error....</div>;
     if (!item) return <div>항목을 찾을 수 없습니다.</div>;
 
     return (

@@ -20,8 +20,10 @@ const Login = () => {
 
         await login(loginid, loginpassword);
         if (useBearsStore.getState().isAuthenticated) { // 로그인 성공했을때 홈으로 넘어가기 
+            alert('로그인 되었습니다');
             navigate('/');
         } else {
+            alert('회원가입이 필요합니다');
             navigate("/join");
         }
 
