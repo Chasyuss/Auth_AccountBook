@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const JSON_SEVER_HOST = "http://localhost:5003";
+const JSON_SEVER_HOST = "https://shrouded-hickory-lint.glitch.me";
 
 export const getExpenses = async () => {
   try {
