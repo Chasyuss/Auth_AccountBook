@@ -41,6 +41,11 @@ const Home = () => {
 
     const { data: expenses = [], isLoading, error } = useQuery({ queryKey: ["expenses"], queryFn: getExpenses });
 
+    const filteredExpenses = expenses.filter(expense => {
+        const expenseMonth = new Date(expense.date).getMonth() + 1 + '월';
+        return expenseMonth === activeMonth;
+    });
+
     const [date, setDate] = useState(""); // Date
     const [item, setItem] = useState(""); // Item
     const [amount, setAmount] = useState(""); // Amount
@@ -97,8 +102,8 @@ const Home = () => {
                         ))}
                     </Tabs>
                     <Content>
-                        {expenses.length > 0 ? (
-                            expenses.map((item) => (
+                        {filteredExpenses.length > 0 ? (
+                            filteredExpenses.map((item) => (
                                 <List key={item.id} onClick={() => navigate(`/detail/${item.id}`)}>
                                     <DateWrapper> {item.date} </DateWrapper>
                                     <MoneyWrapper> {item.amount}원 </MoneyWrapper>
