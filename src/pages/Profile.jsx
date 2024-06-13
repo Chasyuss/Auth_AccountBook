@@ -2,12 +2,14 @@ import React, { useRef, useState } from 'react'
 import styled from 'styled-components';
 import Navbar from "./Layout";
 import useBearsStore from '../zustand/bearsStore';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const [avatar, setAvatar] = useState(null);
     const [nickname, setNickname] = useState("");
     const updateProfile = useBearsStore((state) => state.updateProfile);
     const fileInputRef = useRef(null); // 파일 입력 요소 참조
+    const navigate = useNavigate();
 
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
@@ -22,6 +24,9 @@ const Profile = () => {
         await updateProfile(avatar, nickname);
         const updatedUser = useBearsStore.getState().user;
         setNickname(updatedUser.nickname);
+
+        navigate('/');
+
 
         //초기화 
         setNickname('');

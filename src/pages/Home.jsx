@@ -1,106 +1,78 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import fakedata from './FakeData';
-import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Layout";
+import { QueryClient, useQuery } from "@tanstack/react-query";
+import { getExpenses } from '../lib/api/expense';
+import { postExpense } from '../lib/api/expense';
+import { useMutation } from '@tanstack/react-query';
+import uuid4 from 'uuid4';
+import useBearsStore from '../zustand/bearsStore';
 
 
 const Home = () => {
+    const navigate = useNavigate();
+    const queryClient = new QueryClient();
+    const { isAuthenticated, user } = useBearsStore();
+
+    const mutation = useMutation({
+        mutationFn: postExpense, onSuccess: () => {
+            queryClient.invalidateQueries(["expenses"]); // query 키값을 다 초기화시킴 
+            navigate(0); //화면 껐다 키기지만 넘어가지는 않음 
+        },
+    });
+
     const months = [
         '1월', '2월', '3월', '4월', '5월', '6월',
         '7월', '8월', '9월', '10월', '11월', '12월'
     ];
 
-    //내용 추가 
-    const [date, setDate] = useState(""); //날짜
-    const [item, setItem] = useState(""); //항목
-    const [amount, setAmount] = useState(""); //돈
-    const [description, setDescription] = useState(""); //내용
-
-    const [allItems, setAllItems] = useState(() => {
-        const storedItems = localStorage.getItem('allItems');
-        const allItems = storedItems ? JSON.parse(storedItems) : [];
-        return [...allItems];
-    }); //전체 fakedata랑 Allitem 합치기
-
     const [activeMonth, setActiveMonth] = useState(() => {
         return localStorage.getItem("activeMonth") || "1월";
-    }); //월 선택 
+    });
 
     useEffect(() => {
         localStorage.setItem("activeMonth", activeMonth);
     }, [activeMonth]);
 
-
-    useEffect(() => {
-        // 초기화 시 fakedata와 로컬 스토리지 데이터를 합쳐 로컬 스토리지에 저장
-        const storedItems = localStorage.getItem('allItems');
-        const allItems = storedItems ? JSON.parse(storedItems) : [];
-        const combinedItems = [...fakedata, ...allItems];
-        if (allItems.length === 0) {
-            localStorage.setItem('allItems', JSON.stringify(combinedItems));
-            setAllItems(combinedItems);
-        } else {
-            setAllItems(allItems);
-        }
-    }, []);
-
-    const handleSubmit = ((e) => {
-        e.preventDefault();
-
-        if (!date || !amount) {
-            alert('날짜, 금액을 입력해주세요');
-            return;
-        }
-
-        if (isNaN(Date.parse(date))) {
-            alert('올바른 날짜 형식이 아닙니다. YYYY-MM-DD 형식을 사용해주세요');
-            return;
-        }
-
-        if (isNaN(amount) || amount <= 0) {
-            alert('올바른 금액을 입력해주세요');
-            return;
-        }
-
-        const newItem = {
-            id: uuidv4(),
-            date,
-            item,
-            amount,
-            description
-        };
-
-
-        setAllItems([...allItems, newItem]);
-
-
-        localStorage.setItem("allItems", JSON.stringify([...allItems, newItem])); // 로컬스토리지에서 가져오기
-
-        //입력창 비우기
-        setDate('');
-        setItem('');
-        setAmount('');
-        setDescription('');
-    });
-
     const handleTab = (month) => {
         setActiveMonth(month);
     };
 
+    const { data: expenses = [], isLoading, error } = useQuery({ queryKey: ["expenses"], queryFn: getExpenses });
 
-    // 원하는 월 필터링 
-    //fakedata랑 로컬스토리지 데이터를 합치게 나오게함
-    const filterdata = allItems.filter(item => {
-        const dataMonth = new Date(item.date).getMonth() + 1; // 0부터 시작이니까 1 더해줘야 안밀림
-        return `${dataMonth}월` === activeMonth;
-    }); // 문자열을 날짜로 변경후, 해당 열을 가져옴 
+    const [date, setDate] = useState(""); // Date
+    const [item, setItem] = useState(""); // Item
+    const [amount, setAmount] = useState(""); // Amount
+    const [description, setDescription] = useState(""); // Description
 
-    const navigate = useNavigate(); //페이지 이동 
-    const HandleDetailClick = (id) => {
-        navigate(`/detail/${id}`);
-    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (!date || !amount) {
+            alert('날짜와 금액을 입력해주세요');
+            return;
+        }
+
+        const newExpense = {
+            id: uuid4(),
+            date,
+            item,
+            amount,
+            description,
+            createdBy: user.userId,
+        };
+
+
+        mutation.mutate(newExpense);
+
+
+        setDate('');
+        setItem('');
+        setAmount('');
+        setDescription('');
+    };
 
     return (
         <>
@@ -121,17 +93,17 @@ const Home = () => {
 
                     <Tabs>
                         {months.map((month, index) => (
-                            <Tab key={index} $active={activeMonth === month} //클릭한 박스 확인위해 active prop에 할당할 값
-                                onClick={() => handleTab(month)} > {month} </Tab>
+                            <Tab key={index} $active={activeMonth === month} onClick={() => handleTab(month)} > {month} </Tab>
                         ))}
                     </Tabs>
                     <Content>
-                        {filterdata.length > 0 ? (
-                            filterdata.map((item) => (
-                                <List key={item.id} onClick={() => HandleDetailClick(item.id)}>
+                        {expenses.length > 0 ? (
+                            expenses.map((item) => (
+                                <List key={item.id} onClick={() => navigate(`/detail/${item.id}`)}>
                                     <DateWrapper> {item.date} </DateWrapper>
                                     <MoneyWrapper> {item.amount}원 </MoneyWrapper>
                                     <Description> {item.item}: {item.description} </Description>
+                                    <CreateBy> 작성자: {item.createdBy} </CreateBy>
                                 </List>
                             ))
                         ) : (
@@ -145,6 +117,8 @@ const Home = () => {
 };
 
 export default Home;
+
+
 
 const Input = styled.div`
   display: flex;
@@ -271,4 +245,10 @@ const Description = styled.div`
     color: #1e2945;
     font-size: 16px;
     margin: 4px;
+`;
+
+const CreateBy = styled.div`
+    font-size: 15px;
+    text-align: right;
+    color: #1e2945;
 `;
