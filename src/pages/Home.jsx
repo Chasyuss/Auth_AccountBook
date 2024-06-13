@@ -46,6 +46,7 @@ const Home = () => {
     const [amount, setAmount] = useState(""); // Amount
     const [description, setDescription] = useState(""); // Description
 
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -102,6 +103,7 @@ const Home = () => {
                                     <DateWrapper> {item.date} </DateWrapper>
                                     <MoneyWrapper> {item.amount}원 </MoneyWrapper>
                                     <Description> {item.item}: {item.description} </Description>
+                                    <CreateBy> 작성자: {item.createdBy} </CreateBy>
                                 </List>
                             ))
                         ) : (
@@ -243,4 +245,10 @@ const Description = styled.div`
     color: #1e2945;
     font-size: 16px;
     margin: 4px;
+`;
+
+const CreateBy = styled.div`
+    font-size: 15px;
+    text-align: right;
+    color: #1e2945;
 `;
